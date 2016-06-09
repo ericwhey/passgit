@@ -104,16 +104,20 @@ public class FilesystemWatcherThread extends Thread {
                         
                         PathModel childPathModel = new PathModel(addedPath);
 
-                        PathModel parentPathModel = recursePath.get(recursePath.size()-1);
+                        PathModel existingPathModel = recursePath.get(recursePath.size()-1);
                         
                         boolean found = false;
                         
-                        for (int childIndex=0; !found && childIndex<parentPathModel.getChildCount(); childIndex++) {
-                            PathModel siblingPathModel = parentPathModel.getChild(childIndex);
-                            if (siblingPathModel.toString().compareTo(childPathModel.toString()) == 0) {
-                                found = true;
-                            } else if (siblingPathModel.toString().compareTo(childPathModel.toString()) > 0) {
-                                parentPathModel.addChildAt(childPathModel, childIndex);
+                        if (existingPathModel.equals(childPathModel)) {
+                            found = true;
+                        }
+                        
+                        for (int childIndex=0; !found && childIndex<existingPathModel.getChildCount(); childIndex++) {
+                            PathModel siblingPathModel = existingPathModel.getChild(childIndex);
+                            System.out.println("Comparing " + siblingPathModel.toString() + " with " + childPathModel.toString());
+
+                            if (siblingPathModel.compareTo(childPathModel) > 0) {
+                                existingPathModel.addChildAt(childPathModel, childIndex);
                                 
                                 app.getPathModelTreeModel().fireAddEvent(recursePath, childIndex, childPathModel);
                                 
@@ -123,9 +127,9 @@ public class FilesystemWatcherThread extends Thread {
                         
                         if (!found) {
                             
-                            parentPathModel.addChild(childPathModel);
+                            existingPathModel.addChild(childPathModel);
                             
-                            int childIndex = parentPathModel.getChildCount() - 1;
+                            int childIndex = existingPathModel.getChildCount() - 1;
 
                             app.getPathModelTreeModel().fireAddEvent(recursePath, childIndex, childPathModel);
                         }

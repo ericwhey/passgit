@@ -197,4 +197,25 @@ public class PathModel {
 
         return pathList;
     }
+    
+    public int compareTo(Object o) {
+        if (o instanceof PathModel) {
+            PathModel pathModel = (PathModel)o;
+            
+            return getPath().compareTo(pathModel.getPath());
+        }
+        
+        return 0;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof PathModel) {
+            PathModel pathModel = (PathModel)o;
+            
+            return pathModel.getPath().equals(getPath());
+        }
+        
+        return false;
+    }
 }

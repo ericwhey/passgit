@@ -32,16 +32,16 @@ import javax.swing.JPanel;
  *
  * @author Eric Hey
  */
-public class RepositoryDialog extends JDialog {
+public class OpenRepositoryDialog extends JDialog {
     
-    private RepositoryPanel passwordPanel;
+    private OpenRepositoryPanel passwordPanel;
     
-    public RepositoryDialog(final Controller controller, Path rootPath, String keyFileFilename) {
+    public OpenRepositoryDialog(final Controller controller, Path rootPath, String keyFileFilename) {
         super();
 
-        setTitle("PassGit Repository/Password");
+        setTitle("Open PassGit Repository");
 
-        passwordPanel = new RepositoryPanel();
+        passwordPanel = new OpenRepositoryPanel();
 
         passwordPanel.setRepository(rootPath);
         passwordPanel.setKeyFileFilename(keyFileFilename);
@@ -61,11 +61,24 @@ public class RepositoryDialog extends JDialog {
         });
 
         buttonPanel.add(okayButton);
+        
+        JButton cancelButton = new JButton("Cancel");
+        
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                OpenRepositoryDialog.this.setVisible(false);
+                OpenRepositoryDialog.this.dispose();
+            }
+            
+        });
+        
+        buttonPanel.add(cancelButton);
 
         panel.add(passwordPanel, BorderLayout.CENTER);
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
-        passwordPanel.addListener(new RepositoryPanel.Listener() {
+        passwordPanel.addListener(new OpenRepositoryPanel.Listener() {
             @Override
             public void onOkay() {
                 controller.openRepository(passwordPanel.getRepository(), passwordPanel.getPassword(), passwordPanel.getKeyFile());

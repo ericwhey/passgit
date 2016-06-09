@@ -98,6 +98,7 @@
     </Component>
     <Component class="javax.swing.JCheckBox" name="initCheckbox">
       <Properties>
+        <Property name="selected" type="boolean" value="true"/>
         <Property name="text" type="java.lang.String" value="Initialize GIT Repository"/>
       </Properties>
     </Component>

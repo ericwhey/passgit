@@ -340,6 +340,8 @@ public class EditFilePanel extends javax.swing.JPanel {
             String password = new String(passwordGeneratorPanel.getPassword());
             passwordField.setText(password);
             repeatField.setText(password);
+            dirty = true;
+            validateFields();
         }
     }//GEN-LAST:event_generateButtonActionPerformed
 

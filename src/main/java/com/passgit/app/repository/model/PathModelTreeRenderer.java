@@ -18,10 +18,12 @@
  */
 package com.passgit.app.repository.model;
 
+import java.awt.Color;
 import java.awt.Component;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTree;
+import javax.swing.border.LineBorder;
 import javax.swing.tree.TreeCellRenderer;
 
 /**
@@ -49,6 +51,18 @@ public class PathModelTreeRenderer extends JLabel implements TreeCellRenderer {
                 this.setIcon(new ImageIcon(getClass().getResource("/com/passgit/app/git-changed.png")));
             } else {
                 this.setIcon(null);
+            }
+            
+            if (hasFocus) {
+                this.setBorder(new LineBorder(Color.blue));
+            } else {
+                this.setBorder(null);
+            }
+            
+            if (selected) {
+                this.setBackground(Color.yellow);
+            } else {
+                this.setBackground(null);
             }
         } else {
             this.setText("N/A");

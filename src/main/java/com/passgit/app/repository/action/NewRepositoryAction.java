@@ -38,7 +38,7 @@ public class NewRepositoryAction extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        controller.openRepository();
+        controller.openNewRepository();
     }
     
     

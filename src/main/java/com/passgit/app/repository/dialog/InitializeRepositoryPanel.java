@@ -96,6 +96,7 @@ public class InitializeRepositoryPanel extends javax.swing.JPanel {
 
         cryptographerCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "128-bit AES" }));
 
+        initCheckbox.setSelected(true);
         initCheckbox.setText("Initialize GIT Repository");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

@@ -19,7 +19,7 @@
 package com.passgit.app;
 
 import com.passgit.app.file.Value;
-import com.passgit.app.repository.dialog.RepositoryDialog;
+import com.passgit.app.repository.dialog.OpenRepositoryDialog;
 import com.passgit.app.repository.dialog.InitializeRepositoryPanel;
 import com.passgit.app.file.dialog.EditFileDialog;
 import com.passgit.app.repository.model.PathModel;
@@ -71,6 +71,10 @@ import sun.misc.BASE64Encoder;
 import com.passgit.app.file.Format;
 import com.passgit.app.repository.Cryptography;
 import com.passgit.app.repository.Digest;
+import com.passgit.app.repository.Password;
+import com.passgit.app.repository.dialog.NewRepositoryDialog;
+import com.passgit.app.repository.dialog.NewRepositoryPanel;
+import com.passgit.app.repository.password.DefaultPassword;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -91,16 +95,18 @@ public class PassGit {
     private Cryptography cryptographer = new AES128Cryptography();
     private Digest digester = new HmacSHA1MACDigester();
     private Format fileFormat = new Base64EncodedEncryptedPropertiesFormat();
+    private Password passwordPreparer = new DefaultPassword();
 
     private byte[] digest;
 
     private Path rootPath;
     private PathModel rootPathModel;
     private PathModelTreeModel pathModelTreeModel;
-    
+
     private String keyFileFilename = null;
 
-    private RepositoryDialog repositoryDialog;
+    private OpenRepositoryDialog repositoryDialog;
+    private NewRepositoryDialog newRepositoryDialog;
     private MainFrame mainFrame;
 
     private Repository gitRepository;
@@ -184,7 +190,7 @@ public class PassGit {
         } else {
             rootPath = FileSystems.getDefault().getPath(System.getProperty("user.home") + File.separator + "pass");
         }
-        
+
         if (keyfile != null) {
             keyFileFilename = keyfile;
         }
@@ -199,7 +205,7 @@ public class PassGit {
     }
 
     public void openRepositoryDialog() {
-        repositoryDialog = new RepositoryDialog(controller, rootPath, keyFileFilename);
+        repositoryDialog = new OpenRepositoryDialog(controller, rootPath, keyFileFilename);
 
         repositoryDialog.setSize(400, 200);
         repositoryDialog.setLocationRelativeTo(null);
@@ -234,58 +240,82 @@ public class PassGit {
         return properties != null;
     }
 
+    public void openNewRepositoryDialog() {
+
+        newRepositoryDialog = new NewRepositoryDialog(this);
+
+        newRepositoryDialog.pack();
+        newRepositoryDialog.setLocationRelativeTo(null);
+        newRepositoryDialog.setVisible(true);
+
+    }
+
+    public boolean newRepository(char[] password, File keyFile, Format fileFormat, Cryptography cryptographer, boolean init) {
+
+        byte[] key;
+
+        if (init) {
+            try {
+                Git git = Git.init().setDirectory(rootPath.toFile()).call();
+                gitRepository = git.getRepository();
+            } catch (GitAPIException ex) {
+                Logger.getLogger(PassGit.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        key = passwordPreparer.getKey(password, keyFile);
+
+        if (key != null) {
+
+            initCryptography(key);
+
+            properties = saveProperties();
+
+            preferences.put("root", rootPath.toString());
+
+            if (keyFile != null) {
+                preferences.put("keyfile", keyFile.getAbsolutePath());
+            } else {
+                preferences.remove("keyfile");
+            }
+
+            newRepositoryDialog.setVisible(false);
+
+            return true;
+        }
+
+        return false;
+
+    }
+
     public boolean initializeRepository(char[] password, File keyFile) {
         InitializeRepositoryPanel initializeRepositoryPanel = new InitializeRepositoryPanel(this);
 
         int newRepositoryPanelResult = JOptionPane.showConfirmDialog(repositoryDialog, initializeRepositoryPanel, "Initialize Repository", JOptionPane.OK_CANCEL_OPTION);
 
         if (newRepositoryPanelResult == JOptionPane.OK_OPTION) {
-            try {
 
-                fileFormat = initializeRepositoryPanel.getFileFormat();
-                cryptographer = initializeRepositoryPanel.getCryptographer();
+            fileFormat = initializeRepositoryPanel.getFileFormat();
+            cryptographer = initializeRepositoryPanel.getCryptographer();
 
-                if (initializeRepositoryPanel.getInit()) {
-                    try {
-                        Git git = Git.init().setDirectory(rootPath.toFile()).call();
-                        gitRepository = git.getRepository();
-                    } catch (GitAPIException ex) {
-                        Logger.getLogger(PassGit.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+            if (initializeRepositoryPanel.getInit()) {
+                try {
+                    Git git = Git.init().setDirectory(rootPath.toFile()).call();
+                    gitRepository = git.getRepository();
+                } catch (GitAPIException ex) {
+                    Logger.getLogger(PassGit.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            }
 
-                byte[] key;
-                byte[] passFileKey;
+            byte[] key = passwordPreparer.getKey(password, keyFile);
 
-                if (keyFile != null) {
-                    BufferedReader reader = new BufferedReader(new FileReader(keyFile));
-
-                    String line = reader.readLine();
-
-                    passFileKey = new BASE64Decoder().decodeBuffer(line);
-                } else {
-                    passFileKey = new byte[0];
-                }
-
-                if (password.length > 0 && passFileKey.length > 0) {
-                    MessageDigest md = MessageDigest.getInstance("SHA-256");
-
-                    ByteBuffer bytes = ByteBuffer.allocate(password.length + passFileKey.length);
-                    bytes.put(toBytes(password));
-                    bytes.put(passFileKey);
-                    key = md.digest(bytes.array());
-                } else if (passFileKey.length > 0) {
-                    key = passFileKey;
-                } else {
-                    key = toBytes(password);
-                }
-
+            if (key != null) {
                 initCryptography(key);
 
                 properties = saveProperties();
 
                 preferences.put("root", rootPath.toString());
-                
+
                 if (keyFile != null) {
                     preferences.put("keyfile", keyFile.getAbsolutePath());
                 } else {
@@ -295,89 +325,58 @@ public class PassGit {
                 repositoryDialog.setVisible(false);
 
                 return true;
-
-            
-            } catch (IOException ex) {
-                Logger.getLogger(PassGit.class.getName()).log(Level.SEVERE, null, ex);  
-            } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(PassGit.class.getName()).log(Level.SEVERE, null, ex);
             }
+
         }
 
         return false;
     }
 
     public boolean openRepository(char[] password, File keyFile) {
-        try {
 
+        try {
             FileRepositoryBuilder builder = new FileRepositoryBuilder();
             gitRepository = builder.setMustExist(true).setWorkTree(rootPath.toFile()).build();
 
             cryptographer = (Cryptography) Class.forName(properties.getProperty("cryptographer")).newInstance();
             fileFormat = (Format) Class.forName(properties.getProperty("format")).newInstance();
 
-            byte[] key;
-            byte[] passFileKey;
+            byte[] key = passwordPreparer.getKey(password, keyFile);
 
-            if (keyFile != null) {
-                BufferedReader reader = new BufferedReader(new FileReader(keyFile));
+            if (key != null) {
+                initCryptography(key);
 
-                String line = reader.readLine();
+                byte[] propertiesDigest = getCryptographer().decrypt(new BASE64Decoder().decodeBuffer(properties.getProperty("mac")));
 
-                passFileKey = new BASE64Decoder().decodeBuffer(line);
-            } else {
-                passFileKey = new byte[0];
-            }
+                if (arraysEqual(digest, propertiesDigest)) {
 
-            if (password.length > 0 && passFileKey.length > 0) {
-                MessageDigest md = MessageDigest.getInstance("SHA-256");
+                    preferences.put("root", rootPath.toString());
+                    if (keyFile != null) {
+                        preferences.put("keyfile", keyFile.getAbsolutePath());
+                    } else {
+                        preferences.remove("keyfile");
+                    }
 
-                ByteBuffer bytes = ByteBuffer.allocate(password.length + passFileKey.length);
-                bytes.put(toBytes(password));
-                bytes.put(passFileKey);
-                key = md.digest(bytes.array());
-            } else if (passFileKey.length > 0) {
-                key = passFileKey;
-            } else {
-                key = toBytes(password);
-            }
+                    repositoryDialog.setVisible(false);
 
-            initCryptography(key);
+                    return true;
 
-            byte[] propertiesDigest = getCryptographer().decrypt(new BASE64Decoder().decodeBuffer(properties.getProperty("mac")));
-
-            if (arraysEqual(digest, propertiesDigest)) {
-
-                preferences.put("root", rootPath.toString());
-                if (keyFile != null) {
-                    preferences.put("keyfile", keyFile.getAbsolutePath());
                 } else {
-                    preferences.remove("keyfile");
+
+                    JOptionPane.showMessageDialog(repositoryDialog, "Password digest does not match password digest stored in repository properties.");
+
                 }
-
-                repositoryDialog.setVisible(false);
-
-                return true;
-
-            } else {
-
-                JOptionPane.showMessageDialog(repositoryDialog, "Password digest does not match password digest stored in repository properties.");
-
             }
-        } catch (ClassNotFoundException ex) {
 
+        } catch (IOException ex) {
+            Logger.getLogger(PassGit.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(PassGit.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-
             Logger.getLogger(PassGit.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-
-            Logger.getLogger(PassGit.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-
             Logger.getLogger(PassGit.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-
             Logger.getLogger(PassGit.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -531,8 +530,6 @@ public class PassGit {
     }
 
     public Properties getProperties() {
-        Properties properties = null;
-
         File propertiesFile = rootPath.resolve(".passgit.properties").toFile();
 
         if (propertiesFile.exists()) {

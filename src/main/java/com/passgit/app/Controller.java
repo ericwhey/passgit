@@ -18,6 +18,7 @@
  */
 package com.passgit.app;
 
+import com.passgit.app.file.Format;
 import com.passgit.app.file.action.AddDirectoryAction;
 import com.passgit.app.file.action.AddFileAction;
 import com.passgit.app.file.action.CopyPasswordToClipboardAction;
@@ -25,6 +26,7 @@ import com.passgit.app.file.action.DeleteAction;
 import com.passgit.app.file.action.EditFileAction;
 import com.passgit.app.file.action.GitAddAction;
 import com.passgit.app.file.action.GitRemoveAction;
+import com.passgit.app.repository.Cryptography;
 import com.passgit.app.repository.action.CloseRepositoryAction;
 import com.passgit.app.repository.action.CommitRepositoryAction;
 import com.passgit.app.repository.action.ConvertRepositoryAction;
@@ -137,8 +139,26 @@ public class Controller {
         gitRemoveAction = new GitRemoveAction(this);
     }
     
-    public void newRepository() {
-        app.openRepositoryDialog();
+    public void openNewRepository() {
+        app.openNewRepositoryDialog();
+    }
+    
+    public void newRepository(Path rootPath, char[] password, File keyFile, Format fileFormat, Cryptography cryptography, boolean init) {
+        app.setRootPath(rootPath);
+        
+        if (app.repositoryExists()) {
+            if (app.newRepository(password, keyFile, fileFormat, cryptography, init)) {
+                showRepository();
+            }
+        } else {
+            if (app.openCreateRepositoryDirectoryDialog()) {
+                if (app.createRepositoryDirectory(rootPath)) {
+                    if (app.newRepository(password, keyFile, fileFormat, cryptography, init)) {
+                        showRepository();
+                    }
+                }
+            }
+        }
     }
     
     public void openRepository() {

@@ -30,12 +30,12 @@ import javax.swing.JFileChooser;
  *
  * @author Eric Hey
  */
-public class RepositoryPanel extends javax.swing.JPanel {
+public class OpenRepositoryPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form CipherPanel
      */
-    public RepositoryPanel() {
+    public OpenRepositoryPanel() {
         initComponents();
         
         passwordField.addActionListener(new ActionListener() {
@@ -59,7 +59,7 @@ public class RepositoryPanel extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         passwordField = new javax.swing.JPasswordField();
         jLabel2 = new javax.swing.JLabel();
-        fileField = new javax.swing.JTextField();
+        keyFileField = new javax.swing.JTextField();
         chooseKeyFileButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         repositoryField = new javax.swing.JTextField();
@@ -99,7 +99,7 @@ public class RepositoryPanel extends javax.swing.JPanel {
                         .addGap(14, 14, 14)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(fileField, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                                .addComponent(keyFileField, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(chooseKeyFileButton))
                             .addComponent(passwordField)))
@@ -126,7 +126,7 @@ public class RepositoryPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(fileField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(keyFileField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(chooseKeyFileButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -142,7 +142,7 @@ public class RepositoryPanel extends javax.swing.JPanel {
         
         File currentFile = fc.getSelectedFile();
         
-        fileField.setText(currentFile.toPath().toString());
+        keyFileField.setText(currentFile.toPath().toString());
     }//GEN-LAST:event_chooseKeyFileButtonActionPerformed
 
     private void chooseRepositoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseRepositoryButtonActionPerformed
@@ -172,12 +172,12 @@ public class RepositoryPanel extends javax.swing.JPanel {
     }
     
     public void setKeyFileFilename(String filename) {
-        fileField.setText(filename);
+        keyFileField.setText(filename);
     }
     
     public File getKeyFile() {
-        if (!fileField.getText().equals("")) {
-            return new File(fileField.getText());
+        if (!keyFileField.getText().equals("")) {
+            return new File(keyFileField.getText());
         } 
             
         return null;
@@ -186,10 +186,10 @@ public class RepositoryPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton chooseKeyFileButton;
     private javax.swing.JButton chooseRepositoryButton;
-    private javax.swing.JTextField fileField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JTextField keyFileField;
     private javax.swing.JPasswordField passwordField;
     private javax.swing.JTextField repositoryField;
     // End of variables declaration//GEN-END:variables
