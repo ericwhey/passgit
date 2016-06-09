@@ -1,0 +1,4 @@
+#!/bin/bash
+PROJECT_PATH=$( cd "$(dirname "${BASH_SOURCE}")" ; cd .. ; pwd -P )
+
+java -jar $PROJECT_PATH/target/passgit-1.0-SNAPSHOT-shaded.jar

@@ -1,0 +1,3 @@
+com.passgit.app.file.format.PassMultilineFormat
+com.passgit.app.file.format.PassFormat
+com.passgit.app.file.format.Base64EncodedEncryptedPropertiesFormat

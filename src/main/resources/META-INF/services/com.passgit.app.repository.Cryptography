@@ -1,0 +1,4 @@
+com.passgit.app.repository.cryptography.AES128Cryptography
+com.passgit.app.repository.cryptography.AES256Cryptography
+com.passgit.app.repository.cryptography.CAST5Cryptography
+

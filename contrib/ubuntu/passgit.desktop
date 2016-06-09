@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=passGit
+GenericName=passGit Password Manager Using Encryption and Git
+Comment=Unipro UGENE is a cross-platform visual environment for DNA and protein sequence analysis.
+Exec=bin/passgit
+Icon=contrib/icons/icon.svg
+Type=Application
+Categories=Utility;Development;
