@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="612" height="792" viewBox="0, 0, 612, 792">
-  <g id="Layer_1">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="186.799" height="220.323" viewBox="0, 0, 186.799, 220.323">
+  <g id="Layer_1" transform="translate(-215.5, -228.14)">
     <path d="M222.296,264.264 L216.5,259.207 L227,259.207 L226.514,264.264 L222.296,264.264 z" fill="#C8C8C8"/>
     <g>
       <path d="M396,229.64 L401.799,235.764 L401.799,264.529 L390.385,264.529 L390.385,340.962 C390.385,359.087 388.052,366.551 383.385,374.962 C366.826,404.808 335.385,432.962 311.385,447.962 L306.5,446.015 L375.511,365.803 L385.5,259.14 L396,258.707 z" fill="#C8C8C8"/>
@@ -26,8 +26,5 @@
       <path d="M301.75,335.12 C299.062,333.745 297.15,330.649 297.15,326.993 C297.15,321.829 301.336,317.643 306.5,317.643 C311.664,317.643 315.85,321.829 315.85,326.993 C315.85,330.427 313.999,333.428 311.24,335.054 L315.85,367.709 L297.15,367.709 z" fill-opacity="0" stroke="#000000" stroke-width="1"/>
     </g>
     <path d="M301.76,335.054 L301.75,335.12" fill-opacity="0" stroke="#000000" stroke-width="1"/>
-    <text transform="matrix(1, 0, 0, 1, 306, 482.462)">
-      <tspan x="-111.322" y="25.5" font-family="TrebuchetMS" font-size="72" fill="#001B7E">passGit</tspan>
-    </text>
   </g>
 </svg>

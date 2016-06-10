@@ -24,7 +24,7 @@ along with passGit.  If not, see <http://www.gnu.org/licenses/>.
     <artifactId>passgit</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>PassGit</name>
+    <name>passGit</name>
     <url>http://maven.apache.org</url>
     <repositories>
         <repository>
@@ -60,19 +60,19 @@ along with passGit.  If not, see <http://www.gnu.org/licenses/>.
         </resources>
         <plugins>
             <plugin>
-      <!-- Build an executable JAR -->
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-jar-plugin</artifactId>
-      <version>2.4</version>
-      <configuration>
-        <archive>
-          <manifest>
-            <addClasspath>true</addClasspath>
-            <mainClass>com.passgit.app.PassGit</mainClass>
-          </manifest>
-        </archive>
-      </configuration>
-    </plugin>
+                <!-- Build an executable JAR -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>com.passgit.app.PassGit</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
     
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -82,15 +82,15 @@ along with passGit.  If not, see <http://www.gnu.org/licenses/>.
                     <shadedArtifactAttached>true</shadedArtifactAttached> <!-- Make the shaded artifact not the main one -->
                     <shadedClassifierName>shaded</shadedClassifierName> <!-- set the suffix to the shaded jar -->
                     <filters>
-                                <filter>
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>META-INF/*.SF</exclude>
-                                        <exclude>META-INF/*.DSA</exclude>
-                                        <exclude>META-INF/*.RSA</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
                 </configuration>
                 <executions>
                     <execution>
@@ -130,19 +130,35 @@ along with passGit.  If not, see <http://www.gnu.org/licenses/>.
                                 <fileVersion>1.0.0.0</fileVersion>
                                 <txtFileVersion>${project.version}</txtFileVersion>
                                 <fileDescription>${project.name}</fileDescription>
-                                <copyright>passgit.com</copyright>
+                                <copyright>Eric Hey</copyright>
                                 <productVersion>1.0.0.0</productVersion>
                                 <txtProductVersion>1.0.0.0</txtProductVersion>
                                 <productName>${project.name}</productName>
-                                <companyName>PassGit</companyName>
-                                <internalName>PassGit</internalName>
+                                <companyName>passGit</companyName>
+                                <internalName>passGit</internalName>
                                 <originalFilename>passgit.exe</originalFilename>
                             </versionInfo>
-                           
-                            
-
-
+  
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>sh.tak.appbundler</groupId>
+                <artifactId>appbundle-maven-plugin</artifactId>
+                <version>1.1.0</version>
+                <configuration>
+                    <mainClass>com.passgit.app.PassGit</mainClass>
+                    <generateDiskImageFile>true</generateDiskImageFile>
+                    <iconFile>contrib/icons/icon.icns</iconFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>bundle</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

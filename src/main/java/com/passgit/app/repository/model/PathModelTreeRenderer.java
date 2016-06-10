@@ -20,55 +20,50 @@ package com.passgit.app.repository.model;
 
 import java.awt.Color;
 import java.awt.Component;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.border.LineBorder;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
 /**
  *
  * @author Eric Hey
  */
-public class PathModelTreeRenderer extends JLabel implements TreeCellRenderer {
+public class PathModelTreeRenderer extends DefaultTreeCellRenderer {
 
+    private final Icon gitModifiedIcon = new ImageIcon(getClass().getResource("/com/passgit/app/git-modified.png"));
+    private final Icon gitUntrackedIcon = new ImageIcon(getClass().getResource("/com/passgit/app/git-untracked.png"));
+    private final Icon gitDeletedIcon = new ImageIcon(getClass().getResource("/com/passgit/app/git-deleted.png"));
+    private final Icon gitAddedIcon = new ImageIcon(getClass().getResource("/com/passgit/app/git-added.png"));
+    private final Icon gitChangedIcon = new ImageIcon(getClass().getResource("/com/passgit/app/git-changed.png"));
+    
     @Override
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+        Component c = super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
+        
         if (value instanceof PathModel) {
             PathModel pathModel = (PathModel)value;
-            
-            this.setText(pathModel.toString());
-            
+ 
             if (pathModel.isModified()) {
-                this.setIcon(new ImageIcon(getClass().getResource("/com/passgit/app/git-modified.png")));
+                this.setIcon(gitModifiedIcon);
             } else if (pathModel.isUntracked()) {
-                this.setIcon(new ImageIcon(getClass().getResource("/com/passgit/app/git-untracked.png")));
+                this.setIcon(gitUntrackedIcon);
             } else if (pathModel.isDeleted()) {
-                this.setIcon(new ImageIcon(getClass().getResource("/com/passgit/app/git-deleted.png")));
+                this.setIcon(gitDeletedIcon);
             } else if (pathModel.isAdded()) {
-                this.setIcon(new ImageIcon(getClass().getResource("/com/passgit/app/git-added.png")));
+                this.setIcon(gitAddedIcon);
             } else if (pathModel.isChanged()) {
-                this.setIcon(new ImageIcon(getClass().getResource("/com/passgit/app/git-changed.png")));
+                this.setIcon(gitChangedIcon);
             } else {
                 this.setIcon(null);
             }
-            
-            if (hasFocus) {
-                this.setBorder(new LineBorder(Color.blue));
-            } else {
-                this.setBorder(null);
-            }
-            
-            if (selected) {
-                this.setBackground(Color.yellow);
-            } else {
-                this.setBackground(null);
-            }
-        } else {
-            this.setText("N/A");
+
         }
         
-        return this;
+        return c;
     }
     
 }

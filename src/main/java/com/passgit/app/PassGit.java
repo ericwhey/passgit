@@ -75,6 +75,7 @@ import com.passgit.app.repository.Password;
 import com.passgit.app.repository.dialog.NewRepositoryDialog;
 import com.passgit.app.repository.dialog.NewRepositoryPanel;
 import com.passgit.app.repository.password.DefaultPassword;
+import java.nio.file.LinkOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -549,7 +550,8 @@ public class PassGit {
     }
 
     public Properties saveProperties() {
-        File propertiesFile = rootPath.resolve(".passgit.properties").toFile();
+        Path propertiesPath = rootPath.resolve(".passgit.properties");
+        File propertiesFile = propertiesPath.toFile();
 
         Properties properties = new Properties();
 
@@ -562,6 +564,10 @@ public class PassGit {
             FileWriter writer = new FileWriter(propertiesFile);
 
             properties.store(writer, new Date().toString());
+            
+            if (System.getProperty("os.name").toLowerCase().indexOf("win") > 0)
+                Files.setAttribute(propertiesPath, "dos:hidden", Boolean.TRUE, LinkOption.NOFOLLOW_LINKS);
+            
         } catch (Exception ex) {
             Logger.getLogger(PassGit.class.getName()).log(Level.SEVERE, null, ex);
         }
