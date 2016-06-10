@@ -44,7 +44,7 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame(PassGit app) {
         this.app = app;
         
-        this.setTitle("PassGit");
+        this.setTitle("passGit");
         
         initComponents();
         
@@ -62,7 +62,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
     
     public void openRepository(PathModelTreeModel treeModel) {
-        this.setTitle("PassGit - " + app.getRootPath());
+        this.setTitle("passGit - " + app.getRootPath());
         
         JTree tree = new JTree();
 

@@ -39,7 +39,7 @@ public class OpenRepositoryDialog extends JDialog {
     public OpenRepositoryDialog(final Controller controller, Path rootPath, String keyFileFilename) {
         super();
 
-        setTitle("Open PassGit Repository");
+        setTitle("Open passGit Repository");
 
         passwordPanel = new OpenRepositoryPanel();
 

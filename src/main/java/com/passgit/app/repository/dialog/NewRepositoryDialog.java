@@ -41,7 +41,7 @@ public class NewRepositoryDialog extends JDialog {
         
         this.controller = app.getController();
 
-        setTitle("New PassGit Repository");
+        setTitle("New passGit Repository");
 
         newRepositoryPanel = new NewRepositoryPanel(app);
 
