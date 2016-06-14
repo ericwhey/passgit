@@ -54,11 +54,12 @@ public class MainFrame extends javax.swing.JFrame {
         openButton.setAction(controller.getOpenRepositoryAction());
         closeButton.setAction(controller.getCloseRepositoryAction());
 
+        cloneButton.setAction(controller.getCloneRepositoryAction());
         commitButton.setAction(controller.getCommitRepositoryAction());
         pushButton.setAction(controller.getPushRepositoryAction());
         pullButton.setAction(controller.getPullRepositoryAction());
         
-        convertButton.setAction(controller.getConvertRepositoryAction());
+        settingsButton.setAction(controller.getConvertRepositoryAction());
     }
     
     public void openRepository(PathModelTreeModel treeModel) {
@@ -125,11 +126,12 @@ public class MainFrame extends javax.swing.JFrame {
         openButton = new javax.swing.JButton();
         closeButton = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
+        cloneButton = new javax.swing.JButton();
         commitButton = new javax.swing.JButton();
         pushButton = new javax.swing.JButton();
         pullButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
-        convertButton = new javax.swing.JButton();
+        settingsButton = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -156,6 +158,17 @@ public class MainFrame extends javax.swing.JFrame {
         jToolBar1.add(closeButton);
         jToolBar1.add(jSeparator2);
 
+        cloneButton.setText("Clone");
+        cloneButton.setFocusable(false);
+        cloneButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        cloneButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        cloneButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cloneButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(cloneButton);
+
         commitButton.setText("Commit");
         commitButton.setFocusable(false);
         commitButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -175,16 +188,16 @@ public class MainFrame extends javax.swing.JFrame {
         jToolBar1.add(pullButton);
         jToolBar1.add(jSeparator1);
 
-        convertButton.setText("Convert");
-        convertButton.setFocusable(false);
-        convertButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        convertButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        convertButton.addActionListener(new java.awt.event.ActionListener() {
+        settingsButton.setText("Settings");
+        settingsButton.setFocusable(false);
+        settingsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        settingsButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        settingsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                convertButtonActionPerformed(evt);
+                settingsButtonActionPerformed(evt);
             }
         });
-        jToolBar1.add(convertButton);
+        jToolBar1.add(settingsButton);
 
         getContentPane().add(jToolBar1, java.awt.BorderLayout.PAGE_START);
 
@@ -199,14 +212,18 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void convertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_convertButtonActionPerformed
+    private void settingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_convertButtonActionPerformed
+    }//GEN-LAST:event_settingsButtonActionPerformed
+
+    private void cloneButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cloneButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cloneButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton cloneButton;
     private javax.swing.JButton closeButton;
     private javax.swing.JButton commitButton;
-    private javax.swing.JButton convertButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JToolBar.Separator jSeparator1;
@@ -216,6 +233,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton openButton;
     private javax.swing.JButton pullButton;
     private javax.swing.JButton pushButton;
+    private javax.swing.JButton settingsButton;
     // End of variables declaration//GEN-END:variables
 
     

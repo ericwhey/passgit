@@ -78,7 +78,10 @@ import com.passgit.app.repository.password.DefaultPassword;
 import java.nio.file.LinkOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import org.eclipse.jgit.api.PullResult;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.transport.FetchResult;
+import org.eclipse.jgit.transport.PushResult;
 
 /**
  *
@@ -189,7 +192,7 @@ public class PassGit {
         if (root != null) {
             rootPath = FileSystems.getDefault().getPath(root);
         } else {
-            rootPath = FileSystems.getDefault().getPath(System.getProperty("user.home") + File.separator + "pass");
+            rootPath = FileSystems.getDefault().getPath(System.getProperty("user.home") + File.separator + "passwords");
         }
 
         if (keyfile != null) {
@@ -420,6 +423,22 @@ public class PassGit {
         mainFrame.closeRepository();
     }
 
+    public void cloneRepository() {
+        String remoteUrl = JOptionPane.showInputDialog("Clone Git repository");
+
+        if (remoteUrl != null) {
+            try (Git result = Git.cloneRepository()
+                    .setURI(remoteUrl)
+                    .call()) {
+
+                System.out.println("Having repository: " + result.getRepository().getDirectory());
+
+            } catch (GitAPIException ex) {
+                Logger.getLogger(PassGit.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
     public void commitRepository() {
 
         try (Git git = new Git(gitRepository)) {
@@ -458,11 +477,27 @@ public class PassGit {
     }
 
     public void pushRepository() {
+        try (Git git = new Git(gitRepository)) {
+            Iterable<PushResult> pushResults = git.push().call();
 
+            for (PushResult result : pushResults) {
+                System.out.println(result.getMessages());
+            }
+
+        } catch (GitAPIException ex) {
+            Logger.getLogger(PassGit.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void pullRepository() {
+        try (Git git = new Git(gitRepository)) {
+            PullResult result = git.pull().call();
 
+            System.out.println(result.toString());
+
+        } catch (GitAPIException ex) {
+            Logger.getLogger(PassGit.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void convertRepository() {
@@ -564,10 +599,11 @@ public class PassGit {
             FileWriter writer = new FileWriter(propertiesFile);
 
             properties.store(writer, new Date().toString());
-            
-            if (System.getProperty("os.name").toLowerCase().indexOf("win") > 0)
+
+            if (System.getProperty("os.name").toLowerCase().indexOf("win") > 0) {
                 Files.setAttribute(propertiesPath, "dos:hidden", Boolean.TRUE, LinkOption.NOFOLLOW_LINKS);
-            
+            }
+
         } catch (Exception ex) {
             Logger.getLogger(PassGit.class.getName()).log(Level.SEVERE, null, ex);
         }

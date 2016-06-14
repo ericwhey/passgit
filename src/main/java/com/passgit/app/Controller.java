@@ -27,6 +27,7 @@ import com.passgit.app.file.action.EditFileAction;
 import com.passgit.app.file.action.GitAddAction;
 import com.passgit.app.file.action.GitRemoveAction;
 import com.passgit.app.repository.Cryptography;
+import com.passgit.app.repository.action.CloneRepositoryAction;
 import com.passgit.app.repository.action.CloseRepositoryAction;
 import com.passgit.app.repository.action.CommitRepositoryAction;
 import com.passgit.app.repository.action.ConvertRepositoryAction;
@@ -48,6 +49,7 @@ public class Controller {
     private final NewRepositoryAction newRepositoryAction;
     private final OpenRepositoryAction openRepositoryAction;
     private final CloseRepositoryAction closeRepositoryAction;
+    private final CloneRepositoryAction cloneRepositoryAction;
     private final CommitRepositoryAction commitRepositoryAction;
     private final PushRepositoryAction pushRepositoryAction;
     private final PullRepositoryAction pullRepositoryAction;
@@ -72,6 +74,10 @@ public class Controller {
     
     public CloseRepositoryAction getCloseRepositoryAction() {
         return closeRepositoryAction;
+    }
+    
+    public CloneRepositoryAction getCloneRepositoryAction() {
+        return cloneRepositoryAction;
     }
     
     public CommitRepositoryAction getCommitRepositoryAction() {
@@ -124,6 +130,7 @@ public class Controller {
         newRepositoryAction = new NewRepositoryAction(this);
         closeRepositoryAction = new CloseRepositoryAction(this);
         openRepositoryAction = new OpenRepositoryAction(this);
+        cloneRepositoryAction = new CloneRepositoryAction(this);
         commitRepositoryAction = new CommitRepositoryAction(this);
         pushRepositoryAction = new PushRepositoryAction(this);
         pullRepositoryAction = new PullRepositoryAction(this);
@@ -207,16 +214,20 @@ public class Controller {
         app.closeRepository();
     }
     
+    public void cloneRepository() {
+        app.cloneRepository();        
+    }
+    
     public void commitRepository() {
         app.commitRepository();
     }
     
     public void pushRepository() {
-        
+        app.pushRepository();
     }
     
     public void pullRepository() {
-        
+        app.pullRepository();
     }
     
     public void convertRepository() {
