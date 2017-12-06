@@ -25,9 +25,9 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sun.misc.BASE64Decoder;
 
 /**
  *
@@ -49,8 +49,8 @@ public class DefaultPassword implements Password {
                 BufferedReader reader = new BufferedReader(new FileReader(keyFile));
 
                 String line = reader.readLine();
-
-                keyFilePassword = new BASE64Decoder().decodeBuffer(line);
+                
+                keyFilePassword = Base64.getDecoder().decode(line);
             } else {
                 keyFilePassword = new byte[0];
             }

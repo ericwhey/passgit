@@ -19,11 +19,10 @@ package com.passgit.app.repository.dialog;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 /**
  *
@@ -174,7 +173,7 @@ public class KeyFileGeneratorPanel extends javax.swing.JPanel {
         }
 
         try (FileWriter writer = new FileWriter(new File(keyFileField.getText()))) {
-            writer.write(new BASE64Encoder().encode(keyFilePassword));
+            writer.write(Base64.getEncoder().encodeToString(keyFilePassword));
             writer.close ();
         } catch (IOException ex) {
             Logger.getLogger(KeyFileGeneratorPanel.class.getName()).log(Level.SEVERE, null, ex);

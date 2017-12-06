@@ -66,8 +66,6 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 import com.passgit.app.file.Format;
 import com.passgit.app.repository.Cryptography;
 import com.passgit.app.repository.Digest;
@@ -78,6 +76,7 @@ import com.passgit.app.repository.password.DefaultPassword;
 import java.nio.file.LinkOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import org.eclipse.jgit.api.PullResult;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.transport.FetchResult;
@@ -350,7 +349,7 @@ public class PassGit {
             if (key != null) {
                 initCryptography(key);
 
-                byte[] propertiesDigest = getCryptographer().decrypt(new BASE64Decoder().decodeBuffer(properties.getProperty("mac")));
+                byte[] propertiesDigest = getCryptographer().decrypt(Base64.getDecoder().decode(properties.getProperty("mac")));
 
                 if (arraysEqual(digest, propertiesDigest)) {
 
@@ -592,7 +591,7 @@ public class PassGit {
 
         try {
 
-            properties.put("mac", new BASE64Encoder().encode(getCryptographer().encrypt(digest)));
+            properties.put("mac", Base64.getEncoder().encodeToString(getCryptographer().encrypt(digest)));
             properties.put("format", getFileFormat().getClass().getCanonicalName());
             properties.put("cryptographer", getCryptographer().getClass().getCanonicalName());
 

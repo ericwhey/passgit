@@ -32,10 +32,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 import com.passgit.app.file.Format;
 import com.passgit.app.repository.Cryptography;
+import java.util.Base64;
 
 /**
  *
@@ -56,7 +55,7 @@ public class PassMultilineFormat implements Format {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (firstLine) {
-                    values.put("password", new EncryptedByteArrayValue(app, new BASE64Decoder().decodeBuffer(line)));
+                    values.put("password", new EncryptedByteArrayValue(app, Base64.getDecoder().decode(line)));
                     firstLine = false;
                 } else if (line.startsWith(URL_DELIMITER)) {
                     values.put("url", new StringValue(line.substring(URL_DELIMITER.length()).trim()));
@@ -78,7 +77,7 @@ public class PassMultilineFormat implements Format {
     public void saveValues(PassGit app, PathModel pathModel, Map<String, Value> values) {
         try (FileWriter writer = new FileWriter(pathModel.getFile())) {
             if (values.containsKey("password")) {
-                writer.write(new BASE64Encoder().encode(((EncryptedByteArrayValue) values.get("password")).getEncryptedByteArray()));
+                writer.write(Base64.getEncoder().encodeToString(((EncryptedByteArrayValue) values.get("password")).getEncryptedByteArray()));
                 writer.write('\n');
             }
 

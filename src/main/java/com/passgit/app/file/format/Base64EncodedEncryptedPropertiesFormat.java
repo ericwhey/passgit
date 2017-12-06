@@ -33,11 +33,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 import com.passgit.app.repository.cryptography.AES128Cryptography;
 import com.passgit.app.file.Format;
 import com.passgit.app.repository.Cryptography;
+import java.util.Base64;
 
 /**
  *
@@ -61,19 +60,19 @@ public class Base64EncodedEncryptedPropertiesFormat implements Format {
                 properties.load(reader);
                 
                 if (properties.containsKey("title")) {
-                    values.put("title", new EncryptedByteArrayValue(app, new BASE64Decoder().decodeBuffer(properties.getProperty("title"))));
+                    values.put("title", new EncryptedByteArrayValue(app, Base64.getDecoder().decode(properties.getProperty("title"))));
                 } 
                 
                 if (properties.containsKey("url")) {
-                    values.put("url", new EncryptedByteArrayValue(app, new BASE64Decoder().decodeBuffer(properties.getProperty("url"))));
+                    values.put("url", new EncryptedByteArrayValue(app, Base64.getDecoder().decode(properties.getProperty("url"))));
                 }
                 
                 if (properties.containsKey("username")) {
-                    values.put("username", new EncryptedByteArrayValue(app, new BASE64Decoder().decodeBuffer(properties.getProperty("username"))));
+                    values.put("username", new EncryptedByteArrayValue(app, Base64.getDecoder().decode(properties.getProperty("username"))));
                 }
                 
                 if (properties.containsKey("password")) {
-                    values.put("password", new EncryptedByteArrayValue(app, new BASE64Decoder().decodeBuffer(properties.getProperty("password"))));
+                    values.put("password", new EncryptedByteArrayValue(app, Base64.getDecoder().decode(properties.getProperty("password"))));
                 }
 
             } catch (IOException ex) {
@@ -94,10 +93,10 @@ public class Base64EncodedEncryptedPropertiesFormat implements Format {
                 Value value = values.get("title");
                 if (value instanceof EncryptedByteArrayValue) {
                     EncryptedByteArrayValue encryptedByteArrayValue = (EncryptedByteArrayValue)value;
-                    properties.setProperty("title", new BASE64Encoder().encode(encryptedByteArrayValue.getEncryptedByteArray()));
+                    properties.setProperty("title", Base64.getEncoder().encodeToString(encryptedByteArrayValue.getEncryptedByteArray()));
                 } else {
                     try {
-                        properties.setProperty("title", new BASE64Encoder().encode(app.getCryptographer().encrypt(value.getString().getBytes())));
+                        properties.setProperty("title", Base64.getEncoder().encodeToString(app.getCryptographer().encrypt(value.getString().getBytes())));
                     } catch (Exception ex) {
                         Logger.getLogger(Base64EncodedEncryptedPropertiesFormat.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -108,10 +107,10 @@ public class Base64EncodedEncryptedPropertiesFormat implements Format {
                 Value value = values.get("url");
                 if (value instanceof EncryptedByteArrayValue) {
                     EncryptedByteArrayValue encryptedByteArrayValue = (EncryptedByteArrayValue)value;
-                    properties.setProperty("url", new BASE64Encoder().encode(encryptedByteArrayValue.getEncryptedByteArray()));
+                    properties.setProperty("url", Base64.getEncoder().encodeToString(encryptedByteArrayValue.getEncryptedByteArray()));
                 } else {
                     try {
-                        properties.setProperty("url", new BASE64Encoder().encode(app.getCryptographer().encrypt(value.getString().getBytes())));
+                        properties.setProperty("url", Base64.getEncoder().encodeToString(app.getCryptographer().encrypt(value.getString().getBytes())));
                     } catch (Exception ex) {
                         Logger.getLogger(Base64EncodedEncryptedPropertiesFormat.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -123,17 +122,17 @@ public class Base64EncodedEncryptedPropertiesFormat implements Format {
                 if (value instanceof EncryptedByteArrayValue) {
                     EncryptedByteArrayValue encryptedByteArrayValue = (EncryptedByteArrayValue)value;
                 
-                    properties.setProperty("username", new BASE64Encoder().encode(encryptedByteArrayValue.getEncryptedByteArray()));
+                    properties.setProperty("username", Base64.getEncoder().encodeToString(encryptedByteArrayValue.getEncryptedByteArray()));
                 } else {
                     try {
-                        properties.setProperty("username", new BASE64Encoder().encode(app.getCryptographer().encrypt(value.getString().getBytes())));
+                        properties.setProperty("username", Base64.getEncoder().encodeToString(app.getCryptographer().encrypt(value.getString().getBytes())));
                     } catch (Exception ex) {
                         Logger.getLogger(Base64EncodedEncryptedPropertiesFormat.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
             if (values.containsKey("password")) { 
-                properties.setProperty("password", new BASE64Encoder().encode(((EncryptedByteArrayValue)values.get("password")).getEncryptedByteArray()));
+                properties.setProperty("password", Base64.getEncoder().encodeToString(((EncryptedByteArrayValue)values.get("password")).getEncryptedByteArray()));
             }
             
             properties.store(writer, new Date().toString());
